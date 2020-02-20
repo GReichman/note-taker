@@ -41,6 +41,14 @@ app.post("/api/notes",(req,res)=>{
     });
 });
 
+app.post("/api/notes/remove",(req,res)=>{
+
+    console.log(req.body);
+    deleteNote(req.body,res);
+
+
+});
+
 app.get("/notes",(req,res)=>{
     res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
@@ -53,3 +61,22 @@ app.get("/*",(req,res)=>{
 app.listen(PORT, ()=>{
 console.log(`listening on port ${PORT}`)
 });
+
+
+function deleteNote(note,res){
+    console.log("deleting: ");
+    console.log(note);
+    asyncRead(path.join(__dirname,"/db/db.json")).then(response=>{
+        let notes = JSON.parse(response);
+        notes.forEach((element,i) => {
+            if(element.title == note.title && element.text == note.text){
+                console.log("found");
+                notes.splice(i,1);
+            }
+        });
+        asyncWrite(path.join(__dirname,"/db/db.json"),JSON.stringify(notes)).then(resp=>{
+            res.sendFile(path.join(__dirname, "/public/notes.html"));
+        });
+        
+    });
+}

@@ -12,6 +12,8 @@ const asyncWrite = util.promisify(fs.writeFile);
 //go ahead and add the middleware I need to handle POST requests
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static(path.join(__dirname,"/public/assets/js/")));
+app.use(express.static(path.join(__dirname,"/public/assets/css/")));
 
 app.get("/api/notes",(req,res)=>{
     console.log("sending json");

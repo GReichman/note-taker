@@ -26,11 +26,10 @@ var saveNote = function(note) {
 
 // A function for deleting a note from the db
 var deleteNote = function(note) {
-  console.log(`deleting: ${note}`);
+  // console.log(`deleting: ${note}`);
   return $.ajax({
-    url: "api/notes/remove",
-    data:note,
-    method: "POST"
+    url: "api/notes/"+note,
+    method: "DELETE"
   });
 };
 
@@ -59,6 +58,7 @@ var handleNoteSave = function() {
   };
 
   saveNote(newNote).then(function(data) {
+    // console.log(data);
     getAndRenderNotes();
     renderActiveNote();
   });
@@ -72,12 +72,12 @@ var handleNoteDelete = function(event) {
   var note = $(this)
     .parent(".list-group-item")
     .data();
-console.log(note);
+// console.log(note);
   if (activeNote.id === note.id) {
     activeNote = {};
   }
 
-  deleteNote(note).then(function() {
+  deleteNote(note.id).then(function() {
     getAndRenderNotes();
     renderActiveNote();
   });
